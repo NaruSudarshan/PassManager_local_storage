@@ -1,4 +1,4 @@
-import React, { useEffect ,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -22,24 +22,32 @@ const Body = () => {
 
 
   const savePassword = () => {
-  let updatedPasswords = [...passwordArr];
+    if (
+      form.site.trim().length < 3 ||
+      form.username.trim().length < 3 ||
+      form.password.trim().length < 3
+    ) {
+      alert("All fields must be at least 3 characters long.");
+      return;
+    }
+    let updatedPasswords = [...passwordArr];
 
-  if (editingIndex !== null) {
-    // Remove old entry before saving the updated one
-    updatedPasswords.splice(editingIndex, 1);
-  }
+    if (editingIndex !== null) {
+      // Remove old entry before saving the updated one
+      updatedPasswords.splice(editingIndex, 1);
+    }
 
-  // Add new/updated form entry
-  updatedPasswords.push(form);
+    // Add new/updated form entry
+    updatedPasswords.push(form);
 
-  // Update state and localStorage
-  setPasswordArr(updatedPasswords);
-  localStorage.setItem("passwords", JSON.stringify(updatedPasswords));
+    // Update state and localStorage
+    setPasswordArr(updatedPasswords);
+    localStorage.setItem("passwords", JSON.stringify(updatedPasswords));
 
-  // Reset form and editing state
-  setform({ site: "", username: "", password: "" });
-  setEditingIndex(null);
-};
+    // Reset form and editing state
+    setform({ site: "", username: "", password: "" });
+    setEditingIndex(null);
+  };
 
 
 
@@ -183,86 +191,86 @@ const Body = () => {
                   if (url && !/^https?:\/\//i.test(url)) {
                     url = 'https://' + url;
                   }
-                    // Edit icon as a separate component
-                    function EditIcon({ onClick }) {
+                  // Edit icon as a separate component
+                  function EditIcon({ onClick }) {
                     return (
                       <button
-                      title="Edit entry"
-                      onClick={onClick}
-                      className="text-gray-400 hover:text-yellow-400 transition p-1"
+                        title="Edit entry"
+                        onClick={onClick}
+                        className="text-gray-400 hover:text-yellow-400 transition p-1"
                       >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-1.414.828l-4 1a1 1 0 01-1.263-1.263l1-4a4 4 0 01.828-1.414z" />
-                      </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-1.414.828l-4 1a1 1 0 01-1.263-1.263l1-4a4 4 0 01.828-1.414z" />
+                        </svg>
                       </button>
                     );
-                    }
+                  }
 
-                    return (
-                      <div key={index} className="password-item bg-gray-700/80 border border-gray-600 p-4 rounded-lg flex flex-col gap-1 shadow hover:shadow-lg transition">
+                  return (
+                    <div key={index} className="password-item bg-gray-700/80 border border-gray-600 p-4 rounded-lg flex flex-col gap-1 shadow hover:shadow-lg transition">
                       <div className="flex items-center justify-between">
                         <h3 className="text-gray-100 font-semibold text-lg">
-                        <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:underline text-blue-400"
-                        >
-                          {item.site}
-                        </a>
+                          <a
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:underline text-blue-400"
+                          >
+                            {item.site}
+                          </a>
                         </h3>
                         <div className="flex gap-2">
-                        <EditIcon
-                          onClick={() => {
-                          // Set form for editing and remember which index is being edited
-                          setform(item);
-                          setShowPassword(false);
-                          setEditingIndex(index);
-                          }}
-                        />
-                        <button
-                          title="Delete password"
-                          onClick={() => handleDelete(index)}
-                          className="text-gray-400 hover:text-red-500 transition p-1"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
+                          <EditIcon
+                            onClick={() => {
+                              // Set form for editing and remember which index is being edited
+                              setform(item);
+                              setShowPassword(false);
+                              setEditingIndex(index);
+                            }}
+                          />
+                          <button
+                            title="Delete password"
+                            onClick={() => handleDelete(index)}
+                            className="text-gray-400 hover:text-red-500 transition p-1"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <p className="text-gray-300 text-sm">
-                        Username: <span className="font-mono">{item.username}</span>
+                          Username: <span className="font-mono">{item.username}</span>
                         </p>
                         <button
-                        title="Copy username"
-                        onClick={() => handleCopy(item.username)}
-                        className="text-gray-400 hover:text-blue-400 transition p-1"
+                          title="Copy username"
+                          onClick={() => handleCopy(item.username)}
+                          className="text-gray-400 hover:text-blue-400 transition p-1"
                         >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="2" />
-                          <rect x="3" y="3" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="2" />
-                        </svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="2" />
+                            <rect x="3" y="3" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="2" />
+                          </svg>
                         </button>
                       </div>
                       <div className="flex items-center gap-2">
                         <p className="text-gray-300 text-sm">
-                        Password: <span className="font-mono tracking-wider">{item.password}</span>
+                          Password: <span className="font-mono tracking-wider">{"*".repeat(item.password.length)}</span>
                         </p>
                         <button
-                        title="Copy password"
-                        onClick={() => handleCopy(item.password)}
-                        className="text-gray-400 hover:text-blue-400 transition p-1"
+                          title="Copy password"
+                          onClick={() => handleCopy(item.password)}
+                          className="text-gray-400 hover:text-blue-400 transition p-1"
                         >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="2" />
-                          <rect x="3" y="3" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="2" />
-                        </svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="2" />
+                            <rect x="3" y="3" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="2" />
+                          </svg>
                         </button>
                       </div>
-                      </div>
-                    );
+                    </div>
+                  );
                 })
               ) : (
                 <p className="text-gray-400 text-center">No passwords saved yet.</p>
